@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 echo "Installing Go libs..."
 go get -v github.com/gin-gonic/gin
