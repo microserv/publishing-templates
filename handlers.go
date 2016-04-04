@@ -3,41 +3,19 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	// "labix.org/v2/mgo"
 	"strconv"
 )
 
-func generateDummyTemplate() map[string]string {
-	var template = make(map[string]string)
-	template["name"] = "template"
-	template["template"] = "<html><body><h1>Hello world</h1><p>Some template</p></body></html>"
-	return template
-}
-
-func generateDummyTemplates(num int) [10]map[string]string {
-	var response [10]map[string]string
-	limit := 10
-	
-	if num < limit {
-        limit = num
-    }
-	
-	for i := 0; i < limit; i++ {
-		response[i] = generateDummyTemplate()
-	}
-	
-	return response
-}
-
-func generateJSONErr(status_code int, message string) map[string]string {
-	var response = make(map[string]string)
-	response["status_code"] = strconv.Itoa(status_code)
-	response["message"] = message
-	return response
-}
+// The format for loglines
+const LOGFORMAT = "[%v] %v - %v | %v | %v | %v"
 
 func GetTemplate(c *gin.Context) {
-	c.JSON(404, "ads")
+    templates := getTemplatesByName(c.Param("template_name"))
+    if len(templates) > 0 {
+        c.JSON(200, templates)
+    } else {
+        c.JSON(404, generateJSONErr(404, "Not found"))
+    }
 }
 
 func GetAllTemplates(c *gin.Context) {

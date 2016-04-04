@@ -10,6 +10,9 @@ func main() {
 
 	engine := gin.Default()
 	AddRoutes(version, engine)
+    
+    connectToDb()
+    
 	engine.Run(":8080")
 }
 
