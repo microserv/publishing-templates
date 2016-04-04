@@ -1,6 +1,10 @@
 package main
 
 import (
+	"fmt"
+)
+
+import (
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +16,9 @@ func GetAllTemplates(c *gin.Context) {
 }
 
 func AddTemplate(c *gin.Context) {
+	name := c.PostForm("name")
+	template := c.PostForm("template")
+	fmt.Printf("Incoming template: \"%v\"\n%v\n", name, template)
 }
 
 func UpdateTemplate(c *gin.Context) {
