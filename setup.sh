@@ -1,6 +1,5 @@
 #!/bin/bash -e
 
 echo "Installing Go libs..."
-go get -v github.com/gin-gonic/gin
-go get -v gopkg.in/mgo.v2
+go get -v
 echo "Finished installing Go libs!"
