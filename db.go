@@ -13,10 +13,16 @@ var mongoSession *mgo.Session
 // @TODO: Let's use variables from ENV, like
 // os.Getenv("DB_HOST")
 const (
+    // Host of database to connect to
     DB_HOST = "127.0.0.1" 
-    DB_NAME = ""
+    // Name of database to connect to
+    DB_NAME = "templates"
+    // Username of database user to connect as
     DB_USER = ""
+    // Password for database user
     DB_PASS = ""
+    // MongoDB Collection to use for queries
+    DB_COLL = "templates"
 )
 
 type Template struct {
@@ -50,7 +56,7 @@ func queryCollection(searchParams map[string]string) []map[string]string {
     sessionCopy := mongoSession.Copy()
     defer sessionCopy.Close()
     
-    collection := sessionCopy.DB("templates").C("templates")
+    collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
     
     var results []map[string]string
     
