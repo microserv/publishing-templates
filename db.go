@@ -70,3 +70,11 @@ func getTemplatesByName(name string) []Template {
 	searchParams["name"] = name
 	return queryCollection(searchParams)
 }
+
+func addTemplate(template Template) error {
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
+	return collection.Insert(template)
+}

@@ -34,9 +34,19 @@ func GetAllTemplates(c *gin.Context) {
 }
 
 func AddTemplate(c *gin.Context) {
-	name := c.PostForm("name")
-	template := c.PostForm("template")
-	fmt.Printf("Incoming template: \"%v\"\n%v\n", name, template)
+	// Use the JSON fields in the 'Template' struct to automatically bind the
+	// JSON POST request fields to an instance of the 'Template' struct.
+	var template Template
+	c.Bind(&template)
+
+	err := addTemplate(template)
+	if err != nil {
+		error_msg := fmt.Sprintf("An error occured while attempting to insert: %+v. ERROR: %v", template, err)
+		c.JSON(400, generateJSONErr(400, error_msg))
+		c.Abort()
+	} else {
+		c.JSON(200, "The template was successfully inserted.")
+	}
 }
 
 func UpdateTemplate(c *gin.Context) {
