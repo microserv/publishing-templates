@@ -13,21 +13,16 @@ var mongoSession *mgo.Session
 // @TODO: Let's use variables from ENV, like
 // os.Getenv("DB_HOST")
 const (
-    // Host of database to connect to
     DB_HOST = "127.0.0.1" 
-    // Name of database to connect to
     DB_NAME = "templates"
-    // Username of database user to connect as
     DB_USER = ""
-    // Password for database user
     DB_PASS = ""
-    // MongoDB Collection to use for queries
     DB_COLL = "templates"
 )
 
 type Template struct {
-    Name string  // Name of the template
-    Template string  // The actual template
+    Name string
+    Html string
 }
 
 // Set up the database connection.
@@ -84,7 +79,7 @@ func getTemplatesByName(name string) []Template {
         templates = append(templates, 
             Template{
                 Name: _templates[i]["name"],
-                Template: _templates[i]["template"],
+                Html: _templates[i]["template"],
             })
     }
     
