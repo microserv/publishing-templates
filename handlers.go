@@ -74,6 +74,6 @@ func DeleteTemplate(c *gin.Context) {
 		c.JSON(400, generateJSONErr(400, error_msg))
 		c.Abort()
 	} else {
-		c.JSON(200, "The template was successfully deleted.")
+		c.JSON(204, "The template was successfully deleted.")
 	}
 }
