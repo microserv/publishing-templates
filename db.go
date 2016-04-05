@@ -2,6 +2,7 @@ package main
 
 import (
 	"labix.org/v2/mgo"
+	"labix.org/v2/mgo/bson"
 	"log"
 	"time"
 )
@@ -71,10 +72,26 @@ func getTemplatesByName(name string) []Template {
 	return queryCollection(searchParams)
 }
 
-func addTemplate(template Template) error {
+func insertTemplate(template Template) error {
 	sessionCopy := mongoSession.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
 	return collection.Insert(template)
+}
+
+func updateTemplate(template Template) error {
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
+	return collection.Update(bson.M{"name": template.Name}, template)
+}
+
+func deleteTemplate(template_name string) error {
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
+	return collection.Remove(bson.M{"name": template_name})
 }

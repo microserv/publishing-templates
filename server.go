@@ -22,8 +22,8 @@ func AddRoutes(version string, engine *gin.Engine) {
 		api_group.GET("/template/", GetAllTemplates)
 		api_group.GET("/template/:template_name", GetTemplate)
 
-		api_group.POST("/template", AddTemplate)
-		api_group.PUT("/template/:template_name", UpdateTemplate)
+		api_group.POST("/template/", InsertTemplate)
+		api_group.PUT("/template/", UpdateTemplate)
 
 		api_group.DELETE("/template/:template_name", DeleteTemplate)
 	}

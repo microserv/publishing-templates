@@ -33,24 +33,47 @@ func GetAllTemplates(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-func AddTemplate(c *gin.Context) {
+func InsertTemplate(c *gin.Context) {
 	// Use the JSON fields in the 'Template' struct to automatically bind the
 	// JSON POST request fields to an instance of the 'Template' struct.
 	var template Template
 	c.Bind(&template)
 
-	err := addTemplate(template)
+	err := insertTemplate(template)
 	if err != nil {
 		error_msg := fmt.Sprintf("An error occured while attempting to insert: %+v. ERROR: %v", template, err)
 		c.JSON(400, generateJSONErr(400, error_msg))
 		c.Abort()
 	} else {
-		c.JSON(200, "The template was successfully inserted.")
+		c.JSON(201, "The template was successfully inserted.")
 	}
 }
 
 func UpdateTemplate(c *gin.Context) {
+	// Use the JSON fields in the 'Template' struct to automatically bind the
+	// JSON POST request fields to an instance of the 'Template' struct.
+	var template Template
+	c.Bind(&template)
+
+	err := updateTemplate(template)
+	if err != nil {
+		error_msg := fmt.Sprintf("An error occured while attempting to update: %+v. ERROR: %v", template, err)
+		c.JSON(400, generateJSONErr(400, error_msg))
+		c.Abort()
+	} else {
+		c.JSON(200, "The template was successfully updated.")
+	}
 }
 
 func DeleteTemplate(c *gin.Context) {
+	template_name := c.Param("template_name")
+
+	err := deleteTemplate(template_name)
+	if err != nil {
+		error_msg := fmt.Sprintf("An error occured while attempting to delete: %v. ERROR: %v", template_name, err)
+		c.JSON(400, generateJSONErr(400, error_msg))
+		c.Abort()
+	} else {
+		c.JSON(204, "The template was successfully deleted.")
+	}
 }
