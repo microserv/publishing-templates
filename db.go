@@ -1,9 +1,9 @@
 package main
 
 import (
-    "log"
-    "labix.org/v2/mgo"
-    "time"
+	"labix.org/v2/mgo"
+	"log"
+	"time"
 )
 
 // Save the session here for easy access
@@ -13,75 +13,75 @@ var mongoSession *mgo.Session
 // @TODO: Let's use variables from ENV, like
 // os.Getenv("DB_HOST")
 const (
-    DB_HOST = "127.0.0.1" 
-    DB_NAME = "templates"
-    DB_USER = ""
-    DB_PASS = ""
-    DB_COLL = "templates"
+	DB_HOST = "127.0.0.1"
+	DB_NAME = "templates"
+	DB_USER = ""
+	DB_PASS = ""
+	DB_COLL = "templates"
 )
 
 type Template struct {
-    Name string
-    Html string
+	Name string
+	Html string
 }
 
 // Set up the database connection.
 // Stores session in the global variable "mongoSession".
 func connectToDb() {
-    dbConnectionInfo := &mgo.DialInfo{
-        Addrs: []string{DB_HOST},
-        Timeout: 10 * time.Second,
-        Database: DB_NAME,
-        Username: DB_USER,
-        Password: DB_PASS,
-    }
-    
-    var err error
-    mongoSession, err = mgo.DialWithInfo(dbConnectionInfo)
-    if err != nil {
-        log.Printf("failed %v\n", err)
-    }
-    
-    mongoSession.SetMode(mgo.Monotonic, true)
+	dbConnectionInfo := &mgo.DialInfo{
+		Addrs:    []string{DB_HOST},
+		Timeout:  10 * time.Second,
+		Database: DB_NAME,
+		Username: DB_USER,
+		Password: DB_PASS,
+	}
+
+	var err error
+	mongoSession, err = mgo.DialWithInfo(dbConnectionInfo)
+	if err != nil {
+		log.Printf("failed %v\n", err)
+	}
+
+	mongoSession.SetMode(mgo.Monotonic, true)
 }
 
 // Query the "templates"-collection with the given search parameters.
 // Returns a []map[string]string with the results, or nil if none.
 func queryCollection(searchParams map[string]string) []map[string]string {
-    sessionCopy := mongoSession.Copy()
-    defer sessionCopy.Close()
-    
-    collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
-    
-    var results []map[string]string
-    
-    err := collection.Find(searchParams).All(&results)
-    if err != nil {
-        log.Printf("RunQuery : ERROR : %s\n", err)
-        return nil
-    }
-    
-    return results
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
+
+	var results []map[string]string
+
+	err := collection.Find(searchParams).All(&results)
+	if err != nil {
+		log.Printf("RunQuery : ERROR : %s\n", err)
+		return nil
+	}
+
+	return results
 }
 
 // Get all templates matching this name.
 func getTemplatesByName(name string) []Template {
-    var searchParams = make(map[string]string)
-    searchParams["name"] = name
-    
-    var _templates []map[string]string
-    
-    _templates = queryCollection(searchParams)
+	var searchParams = make(map[string]string)
+	searchParams["name"] = name
 
-    var templates []Template
+	var _templates []map[string]string
 
-    for i, _ := range _templates {
-        templates = append(templates, 
-            Template{
-                Name: _templates[i]["name"],
-                Html: _templates[i]["template"],
-            })
-    }
-    
-    return templates
+	_templates = queryCollection(searchParams)
+
+	var templates []Template
+
+	for i, _ := range _templates {
+		templates = append(templates,
+			Template{
+				Name: _templates[i]["name"],
+				Html: _templates[i]["template"],
+			})
+	}
+
+	return templates
 }
