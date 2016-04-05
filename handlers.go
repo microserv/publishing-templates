@@ -50,6 +50,19 @@ func AddTemplate(c *gin.Context) {
 }
 
 func UpdateTemplate(c *gin.Context) {
+	// Use the JSON fields in the 'Template' struct to automatically bind the
+	// JSON POST request fields to an instance of the 'Template' struct.
+	var template Template
+	c.Bind(&template)
+
+	err := updateTemplate(template)
+	if err != nil {
+		error_msg := fmt.Sprintf("An error occured while attempting to update: %+v. ERROR: %v", template, err)
+		c.JSON(400, generateJSONErr(400, error_msg))
+		c.Abort()
+	} else {
+		c.JSON(200, "The template was successfully updated.")
+	}
 }
 
 func DeleteTemplate(c *gin.Context) {

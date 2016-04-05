@@ -2,6 +2,7 @@ package main
 
 import (
 	"labix.org/v2/mgo"
+	"labix.org/v2/mgo/bson"
 	"log"
 	"time"
 )
@@ -77,4 +78,12 @@ func addTemplate(template Template) error {
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
 	return collection.Insert(template)
+}
+
+func updateTemplate(template Template) error {
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
+	return collection.Update(bson.M{"name": template.Name}, template)
 }
