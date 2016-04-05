@@ -33,13 +33,13 @@ func GetAllTemplates(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-func AddTemplate(c *gin.Context) {
+func InsertTemplate(c *gin.Context) {
 	// Use the JSON fields in the 'Template' struct to automatically bind the
 	// JSON POST request fields to an instance of the 'Template' struct.
 	var template Template
 	c.Bind(&template)
 
-	err := addTemplate(template)
+	err := insertTemplate(template)
 	if err != nil {
 		error_msg := fmt.Sprintf("An error occured while attempting to insert: %+v. ERROR: %v", template, err)
 		c.JSON(400, generateJSONErr(400, error_msg))

@@ -72,7 +72,7 @@ func getTemplatesByName(name string) []Template {
 	return queryCollection(searchParams)
 }
 
-func addTemplate(template Template) error {
+func insertTemplate(template Template) error {
 	sessionCopy := mongoSession.Copy()
 	defer sessionCopy.Close()
 
