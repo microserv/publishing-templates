@@ -66,4 +66,14 @@ func UpdateTemplate(c *gin.Context) {
 }
 
 func DeleteTemplate(c *gin.Context) {
+	template_name := c.Param("template_name")
+
+	err := deleteTemplate(template_name)
+	if err != nil {
+		error_msg := fmt.Sprintf("An error occured while attempting to delete: %v. ERROR: %v", template_name, err)
+		c.JSON(400, generateJSONErr(400, error_msg))
+		c.Abort()
+	} else {
+		c.JSON(200, "The template was successfully deleted.")
+	}
 }
