@@ -21,8 +21,8 @@ const (
 )
 
 type Template struct {
-	Name string
-	Html string
+	Name string "json:'name'"
+	Html string "json:'html'"
 }
 
 // Set up the database connection.
@@ -46,16 +46,16 @@ func connectToDb() {
 }
 
 // Query the "templates"-collection with the given search parameters.
-// Returns a []map[string]string with the results, or nil if none.
-func queryCollection(searchParams map[string]string) []map[string]string {
+// Returns a []Template with the results, or nil if none.
+func queryCollection(searchParams map[string]string) []Template {
 	sessionCopy := mongoSession.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
 
-	var results []map[string]string
-
+	var results []Template
 	err := collection.Find(searchParams).All(&results)
+
 	if err != nil {
 		log.Printf("RunQuery : ERROR : %s\n", err)
 		return nil
@@ -68,20 +68,5 @@ func queryCollection(searchParams map[string]string) []map[string]string {
 func getTemplatesByName(name string) []Template {
 	var searchParams = make(map[string]string)
 	searchParams["name"] = name
-
-	var _templates []map[string]string
-
-	_templates = queryCollection(searchParams)
-
-	var templates []Template
-
-	for i, _ := range _templates {
-		templates = append(templates,
-			Template{
-				Name: _templates[i]["name"],
-				Html: _templates[i]["template"],
-			})
-	}
-
-	return templates
+	return queryCollection(searchParams)
 }
