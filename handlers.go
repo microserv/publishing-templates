@@ -45,7 +45,7 @@ func InsertTemplate(c *gin.Context) {
 		c.JSON(400, generateJSONErr(400, error_msg))
 		c.Abort()
 	} else {
-		c.JSON(200, "The template was successfully inserted.")
+		c.JSON(201, "The template was successfully inserted.")
 	}
 }
 
