@@ -39,7 +39,7 @@ func connectToDb() {
 	var err error
 	mongoSession, err = mgo.DialWithInfo(dbConnectionInfo)
 	if err != nil {
-		log.Printf("failed %v\n", err)
+		log.Printf("Error when attempting to connect to the DB! ERROR: %v\n", err)
 	}
 
 	mongoSession.SetMode(mgo.Monotonic, true)
