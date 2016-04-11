@@ -17,7 +17,7 @@ func main() {
 }
 
 func AddRoutes(version string, engine *gin.Engine) {
-	api_group := engine.Group(fmt.Sprintf("api/v%s", version))
+	api_group := engine.Group(fmt.Sprintf("templates/api/v%s", version))
 	{
 		api_group.GET("/template/", GetAllTemplates)
 		api_group.GET("/template/:template_name", GetTemplate)
