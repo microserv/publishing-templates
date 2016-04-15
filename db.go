@@ -65,6 +65,17 @@ func queryCollection(searchParams map[string]string) []Template {
 	return results
 }
 
+func getAllTemplates() []Template {
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
+
+	var results []Template
+	collection.Find(nil).All(&results)
+	return results
+}
+
 // Get all templates matching this name.
 func getTemplatesByName(name string) []Template {
 	var searchParams = make(map[string]string)

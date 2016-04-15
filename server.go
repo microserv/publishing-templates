@@ -13,7 +13,7 @@ func main() {
 
 	connectToDb()
 
-	engine.Run(":8080")
+	engine.Run(":80")
 }
 
 func AddRoutes(version string, engine *gin.Engine) {
