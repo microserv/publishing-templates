@@ -62,3 +62,30 @@ func DeleteTemplate(c *gin.Context) {
 		c.JSON(204, "The template was successfully deleted.")
 	}
 }
+
+func OAuth2Callback(c *gin.Context) {
+	response := make(map[string]string)
+	code := c.DefaultQuery("code", "")
+	next := c.DefaultQuery("next", "")
+
+	response["code"] = code
+	response["next"] = next
+
+	if code != "" {
+		valid, err := ValidateUserToken(code)
+		if err != "" {
+			fmt.Printf("Authentication failed: %v\n", err)
+		} else {
+			if valid {
+				// Debug
+				// fmt.Println("Authentication succeeded")
+			} else {
+				fmt.Println("Token does not carry correct scope for this operation.")
+			}
+		}
+		c.JSON(200, response)
+		// Redirect to "next" param, as that's where the user wants to go
+	} else {
+		c.JSON(400, generateJSONErr(400, "Missing code"))
+	}
+}
