@@ -17,14 +17,22 @@ func main() {
 }
 
 func AddRoutes(version string, engine *gin.Engine) {
-	api_group := engine.Group(fmt.Sprintf("api/v%s", version))
+	oauth2_routes := engine.Group("oauth2")
 	{
-		api_group.GET("/template/", GetAllTemplates)
-		api_group.GET("/template/:template_name", GetTemplate)
+		oauth2_routes.GET("/callback", OAuth2Callback)
+	}
 
-		api_group.POST("/template/", InsertTemplate)
-		api_group.PUT("/template/", UpdateTemplate)
+	public_routes := engine.Group(fmt.Sprintf("api/v%s", version))
+	{
+		public_routes.GET("/template/", GetAllTemplates)
+		public_routes.GET("/template/:template_name", GetTemplate)
+	}
 
-		api_group.DELETE("/template/:template_name", DeleteTemplate)
+	template_restricted := engine.Group(fmt.Sprintf("api/v%s", version))
+	template_restricted.Use(ValidateRequest("write"))
+	{
+		template_restricted.POST("/template/", InsertTemplate)
+		template_restricted.PUT("/template/:template_name", GetTemplate)
+		template_restricted.DELETE("/template/:template_name", DeleteTemplate)
 	}
 }
