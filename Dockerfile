@@ -16,7 +16,4 @@ WORKDIR ${BASE_DIR}
 RUN go get -v
 RUN go build
 
-# For some reason /run is not a dir in this image, so we need to create it.
-RUN rm /run && mkdir -p /run
-
 EXPOSE 80
