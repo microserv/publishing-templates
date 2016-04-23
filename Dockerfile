@@ -16,4 +16,6 @@ WORKDIR ${BASE_DIR}
 RUN go get -v
 RUN go build
 
+RUN rm -rf /run && mkdir -p /run
+
 EXPOSE 80
