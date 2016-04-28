@@ -4,6 +4,7 @@ import "encoding/json"
 import "fmt"
 import "github.com/gin-gonic/gin"
 import "io/ioutil"
+import "os"
 import "net/http"
 import "net/url"
 import "strings"
@@ -48,9 +49,12 @@ func ValidateUserToken(authorization_code string) (bool, string) {
 	}
 
 	application_information := OAuth2Provider{
-		auth_endpoint: "http://127.0.0.1:8000/oauth2/token/",
-		redirect_uri:  "http://127.0.0.1:8080/oauth2/callback",
-		client_id:     "",
+		// auth_endpoint: "http://127.0.0.1:8000/oauth2/token/",
+		// redirect_uri:  "http://127.0.0.1:8080/oauth2/callback",
+		// client_id:     "",
+    auth_endpoint: os.Getenv("TEMPLATES_AUTH_ENDPOINT"),
+    redirect_uri: os.Getenv("TEMPLATES_OWN_CALLBACK"),
+    client_id: os.Getenv("TEMPLATES_MICROAUTH_CLIENT_ID"),
 	}
 
 	grant_type := "authorization_code"
