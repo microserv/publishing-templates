@@ -13,6 +13,7 @@ func main() {
 
 	connectToDb()
 
+	loadDefaultTemplates("templates/")
 	engine.Run(":80")
 }
 
