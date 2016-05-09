@@ -80,7 +80,13 @@ func getAllTemplates() []Template {
 func getTemplatesByName(name string) []Template {
 	var searchParams = make(map[string]string)
 	searchParams["name"] = name
-	return queryCollection(searchParams)
+  
+  coll := queryCollection(searchParams)
+  if coll != nil {
+	   return coll 
+  } else {
+    return nil
+  }
 }
 
 func insertTemplate(template Template) error {

@@ -14,7 +14,7 @@ func main() {
 	connectToDb()
 
 	loadDefaultTemplates("templates/")
-	engine.Run(":80")
+	engine.Run(":8002")
 }
 
 const enable_access_control = false
