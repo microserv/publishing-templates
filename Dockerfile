@@ -18,4 +18,6 @@ RUN go build
 
 RUN rm -rf /run && mkdir -p /run
 
+ENV SERVICE_NAME templates
+
 EXPOSE 80
