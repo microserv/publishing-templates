@@ -68,3 +68,7 @@ Temporary Items
 .apdisk
 
 publishing-templates
+
+# Test stuff
+coverage.out
+coverage.html
