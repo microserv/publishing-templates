@@ -6,7 +6,7 @@ import (
 )
 
 func GetTemplate(c *gin.Context) {
-	templates := getTemplatesByName(c.Param("template_name"))
+	templates := getTemplatesByName(DB, c.Param("template_name"))
 	if len(templates) > 0 {
 		c.JSON(200, templates)
 	} else {
@@ -15,7 +15,7 @@ func GetTemplate(c *gin.Context) {
 }
 
 func GetAllTemplates(c *gin.Context) {
-	c.JSON(200, getAllTemplates())
+	c.JSON(200, getAllTemplates(DB))
 }
 
 func InsertTemplate(c *gin.Context) {
@@ -24,7 +24,7 @@ func InsertTemplate(c *gin.Context) {
 	var template Template
 	c.Bind(&template)
 
-	err := insertTemplate(template)
+	err := insertTemplate(DB, template)
 	if err != nil {
 		error_msg := fmt.Sprintf("An error occured while attempting to insert: %+v. ERROR: %v", template, err)
 		c.JSON(400, generateJSONErr(400, error_msg))
@@ -40,7 +40,7 @@ func UpdateTemplate(c *gin.Context) {
 	var template Template
 	c.Bind(&template)
 
-	err := updateTemplate(template)
+	err := updateTemplate(DB, template)
 	if err != nil {
 		error_msg := fmt.Sprintf("An error occured while attempting to update: %+v. ERROR: %v", template, err)
 		c.JSON(400, generateJSONErr(400, error_msg))
@@ -53,7 +53,7 @@ func UpdateTemplate(c *gin.Context) {
 func DeleteTemplate(c *gin.Context) {
 	template_name := c.Param("template_name")
 
-	err := deleteTemplate(template_name)
+	err := deleteTemplate(DB, template_name)
 	if err != nil {
 		error_msg := fmt.Sprintf("An error occured while attempting to delete: %v. ERROR: %v", template_name, err)
 		c.JSON(400, generateJSONErr(400, error_msg))

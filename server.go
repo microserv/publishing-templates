@@ -3,15 +3,26 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+  "labix.org/v2/mgo"
 )
+
+var DB *mgo.Session
+
+func GetDbConnection() *mgo.Session {
+  return DB
+}
 
 func main() {
 	version := "1"
+  
+  DB = ConnectToDb()
+  
+  if (DB == nil) {
+    fmt.Printf("DB connection failed: %s", DB)
+  }
 
 	engine := gin.Default()
 	AddRoutes(version, engine)
-
-	connectToDb()
 
 	loadDefaultTemplates("templates/")
 	engine.Run(":8002")

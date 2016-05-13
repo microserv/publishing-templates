@@ -64,6 +64,6 @@ func loadDefaultTemplates(templates_path string) {
 		var name = file[len(templates_path) : len(file)-len(extension)]
 
 		template := Template{name, string(data)}
-		insertTemplate(template)
+		insertTemplate(DB, template)
 	}
 }
