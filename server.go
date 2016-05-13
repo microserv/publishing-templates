@@ -25,7 +25,7 @@ func main() {
 	AddRoutes(version, engine)
 
 	loadDefaultTemplates("templates/")
-	engine.Run(":8002")
+	engine.Run()
 }
 
 const enable_access_control = false
