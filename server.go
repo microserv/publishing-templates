@@ -15,7 +15,7 @@ func GetDbConnection() *mgo.Session {
 func main() {
 	version := "1"
 
-	DB = ConnectToDb()
+	setupServer(nil)
 
 	if DB == nil {
 		fmt.Printf("DB connection failed: %s", DB)
@@ -26,6 +26,14 @@ func main() {
 
 	loadDefaultTemplates("templates/")
 	engine.Run()
+}
+
+func setupServer(db *mgo.Session) {
+	if db == nil {
+		DB = ConnectToDb()
+	} else {
+		DB = db
+	}
 }
 
 const enable_access_control = false
