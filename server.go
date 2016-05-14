@@ -3,23 +3,23 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-  "labix.org/v2/mgo"
+	"labix.org/v2/mgo"
 )
 
 var DB *mgo.Session
 
 func GetDbConnection() *mgo.Session {
-  return DB
+	return DB
 }
 
 func main() {
 	version := "1"
-  
-  DB = ConnectToDb()
-  
-  if (DB == nil) {
-    fmt.Printf("DB connection failed: %s", DB)
-  }
+
+	DB = ConnectToDb()
+
+	if DB == nil {
+		fmt.Printf("DB connection failed: %s", DB)
+	}
 
 	engine := gin.Default()
 	AddRoutes(version, engine)
@@ -44,8 +44,8 @@ func AddRoutes(version string, engine *gin.Engine) {
 
 	template_restricted := engine.Group(fmt.Sprintf("api/v%s", version))
 	if enable_access_control {
-        template_restricted.Use(ValidateRequest("write"))
-    }
+		template_restricted.Use(ValidateRequest("write"))
+	}
 	{
 		template_restricted.POST("/template/", InsertTemplate)
 		template_restricted.PUT("/template/:template_name", GetTemplate)

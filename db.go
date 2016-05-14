@@ -26,8 +26,8 @@ type Template struct {
 // Set up the database connection.
 // Stores session in the global variable "mongoSession".
 func ConnectToDb() *mgo.Session {
-  var mongoSession *mgo.Session
-  
+	var mongoSession *mgo.Session
+
 	dbConnectionInfo := &mgo.DialInfo{
 		Addrs:    []string{DB_HOST},
 		Timeout:  10 * time.Second,
@@ -43,8 +43,8 @@ func ConnectToDb() *mgo.Session {
 	}
 
 	mongoSession.SetMode(mgo.Monotonic, true)
-  
-  return mongoSession
+
+	return mongoSession
 }
 
 // Query the "templates"-collection with the given search parameters.
@@ -81,13 +81,13 @@ func getAllTemplates(db *mgo.Session) []Template {
 func getTemplatesByName(db *mgo.Session, name string) []Template {
 	var searchParams = make(map[string]string)
 	searchParams["name"] = name
-  
-  coll := queryCollection(db, searchParams)
-  if coll != nil {
-	   return coll 
-  } else {
-    return nil
-  }
+
+	coll := queryCollection(db, searchParams)
+	if coll != nil {
+		return coll
+	} else {
+		return nil
+	}
 }
 
 func insertTemplate(db *mgo.Session, template Template) error {
