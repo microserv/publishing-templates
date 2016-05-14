@@ -1,0 +1,12 @@
+language: go
+
+go:
+  - tip
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  - DOCKERTEST_BIND_LOCALHOST=true
