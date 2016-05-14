@@ -5,6 +5,7 @@ ENV BASE_DIR "/var/publishing-templates"
 ENV GOPATH "/root/.go"
 ENV GOBIN ${GOPATH}/bin
 ENV GIN_MODE "release"
+ENV PORT 80
 
 RUN git clone https://github.com/microserv/publishing-templates ${BASE_DIR}
 RUN apk add --update curl go bzr

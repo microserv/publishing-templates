@@ -7,9 +7,6 @@ import (
 	"time"
 )
 
-// Save the session here for easy access
-var mongoSession *mgo.Session
-
 // Details we need to connect to the database
 // @TODO: Let's use variables from ENV, like
 // os.Getenv("DB_HOST")
@@ -28,7 +25,9 @@ type Template struct {
 
 // Set up the database connection.
 // Stores session in the global variable "mongoSession".
-func connectToDb() {
+func ConnectToDb() *mgo.Session {
+	var mongoSession *mgo.Session
+
 	dbConnectionInfo := &mgo.DialInfo{
 		Addrs:    []string{DB_HOST},
 		Timeout:  10 * time.Second,
@@ -44,12 +43,14 @@ func connectToDb() {
 	}
 
 	mongoSession.SetMode(mgo.Monotonic, true)
+
+	return mongoSession
 }
 
 // Query the "templates"-collection with the given search parameters.
 // Returns a []Template with the results, or nil if none.
-func queryCollection(searchParams map[string]string) []Template {
-	sessionCopy := mongoSession.Copy()
+func queryCollection(db *mgo.Session, searchParams map[string]string) []Template {
+	sessionCopy := db.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
@@ -65,8 +66,8 @@ func queryCollection(searchParams map[string]string) []Template {
 	return results
 }
 
-func getAllTemplates() []Template {
-	sessionCopy := mongoSession.Copy()
+func getAllTemplates(db *mgo.Session) []Template {
+	sessionCopy := db.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
@@ -77,30 +78,36 @@ func getAllTemplates() []Template {
 }
 
 // Get all templates matching this name.
-func getTemplatesByName(name string) []Template {
+func getTemplatesByName(db *mgo.Session, name string) []Template {
 	var searchParams = make(map[string]string)
 	searchParams["name"] = name
-	return queryCollection(searchParams)
+
+	coll := queryCollection(db, searchParams)
+	if coll != nil {
+		return coll
+	} else {
+		return nil
+	}
 }
 
-func insertTemplate(template Template) error {
-	sessionCopy := mongoSession.Copy()
+func insertTemplate(db *mgo.Session, template Template) error {
+	sessionCopy := db.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
 	return collection.Insert(template)
 }
 
-func updateTemplate(template Template) error {
-	sessionCopy := mongoSession.Copy()
+func updateTemplate(db *mgo.Session, template Template) error {
+	sessionCopy := db.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
 	return collection.Update(bson.M{"name": template.Name}, template)
 }
 
-func deleteTemplate(template_name string) error {
-	sessionCopy := mongoSession.Copy()
+func deleteTemplate(db *mgo.Session, template_name string) error {
+	sessionCopy := db.Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(DB_NAME).C(DB_COLL)
