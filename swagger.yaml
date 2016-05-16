@@ -1,0 +1,200 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Publishing:Templates
+  description: Provides HTML templates for the publishing editor
+  version: "1.0.0"
+# the domain of the service
+host: despina.128.no
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /templates/api/v1/
+produces:
+  - application/json
+paths:
+  /template:
+    get:
+      summary: Gets all templates
+      description: |
+        The Template endpoint returns information about all the templates
+        registered in the system.
+      tags:
+        - Template
+        - Retrieve
+      responses:
+        200:
+          description: An array of templates
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Templates'
+        default:
+          description: An array of templates
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Templates'
+    post:
+      summary: Create a new template
+      description: lala
+      parameters:
+        - name: name
+          in: formData
+          description: A name for the template
+          required: true
+          type: string
+        - name: template
+          in: formData
+          description: The actual HTML template
+          required: true
+          type: string
+      tags:
+        - Template
+        - Create
+      responses:
+        201:
+          description: Created a template
+          schema:
+            $ref: '#/definitions/Template'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthenticated
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+        
+  /template/:name:
+    get:
+      summary: Gets a specific template
+      description: |
+        A specific HTML template
+      parameters:
+        - name: name
+          in: query
+          description: The name of the template wanted
+          required: true
+          type: string
+      tags:
+        - Template
+        - Retrieve
+      responses:
+        200:
+          description: A single HTML template
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Template'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: All templates
+          schema:
+            $ref: '#/definitions/Templates'
+    put:
+      summary: Update a template
+      description: Updates a specific HTML template
+      parameters:
+        - name: name
+          in: formData
+          description: A name for the template
+          required: true
+          type: string
+        - name: template
+          in: formData
+          description: The actual HTML template
+          required: true
+          type: string
+      tags:
+        - Template
+        - Update
+      responses:
+        200:
+          description: Updated the template
+          schema:
+            $ref: '#/definitions/Template'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthenticated
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a template
+      description: Delete a specific HTML template
+      parameters:
+        - name: name
+          in: formData
+          description: Name of the template to be deleted
+          required: true
+          type: string
+      tags:
+        - Template
+        - Delete
+      responses:
+        204:
+          description: Deleted the template
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthenticated
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Templates:
+    type: array
+    items: 
+      $ref: '#/definitions/Template'
+  Template:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of the template
+      template:
+        type: string
+        description: The actual HTML template
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
