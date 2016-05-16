@@ -23,6 +23,7 @@ func main() {
 
 	engine := gin.Default()
 	AddRoutes(version, engine)
+    engine.Static("/static", "./static")
 
 	loadDefaultTemplates("templates/")
 	engine.Run()
