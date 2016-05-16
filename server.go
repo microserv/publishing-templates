@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-    "time"
 	"github.com/gin-gonic/gin"
 	"github.com/itsjamie/gin-cors"
 	"labix.org/v2/mgo"
+	"time"
 )
 
 var DB *mgo.Session
