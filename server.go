@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+    "time"
 	"github.com/gin-gonic/gin"
+	"github.com/itsjamie/gin-cors"
 	"labix.org/v2/mgo"
 )
 
@@ -22,8 +24,19 @@ func main() {
 	}
 
 	engine := gin.Default()
+
+	engine.Use(cors.Middleware(cors.Config{
+		Origins:         "http://localhost:8000, https://gallifrey.sklirg.io, http://despina.128.no, https://despina.128.no",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     true,
+		ValidateHeaders: false,
+	}))
+
 	AddRoutes(version, engine)
-    engine.Static("/static", "./static")
+	engine.Static("/static", "./static")
 
 	loadDefaultTemplates("templates/")
 	engine.Run()
